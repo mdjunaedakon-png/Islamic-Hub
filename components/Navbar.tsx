@@ -118,35 +118,35 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
             <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">IH</span>
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
+            <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
               Islamic Hub
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <item.icon className="w-4 h-4" />
-                <span>{item.label}</span>
+                <span className="text-sm font-medium">{item.label}</span>
               </Link>
             ))}
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center space-x-4">
-            {/* Search */}
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* Search - Hidden on mobile */}
             <button 
               onClick={() => setShowSearch(true)}
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="hidden sm:flex p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -154,23 +154,23 @@ export default function Navbar() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
 
-            {/* User Menu */}
+            {/* User Menu - Desktop */}
             {isLoading ? (
               <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
             ) : user ? (
-              <div className="relative group">
+              <div className="hidden sm:block relative group">
                 <button className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-medium">
                       {user.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="hidden sm:block">{user.name}</span>
+                  <span className="hidden lg:block">{user.name}</span>
                 </button>
 
                 {/* Dropdown Menu */}
@@ -206,16 +206,16 @@ export default function Navbar() {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="hidden sm:flex items-center space-x-2">
                 <Link
                   href="/auth/login"
-                  className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Login
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="btn-primary"
+                  className="btn-primary text-sm px-4 py-2"
                 >
                   Register
                 </Link>
@@ -225,7 +225,7 @@ export default function Navbar() {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="lg:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -234,8 +234,21 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex flex-col space-y-2">
+          <div className="lg:hidden py-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col space-y-1">
+              {/* Mobile Search */}
+              <button 
+                onClick={() => {
+                  setShowSearch(true);
+                  setIsOpen(false);
+                }}
+                className="flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <Search className="w-4 h-4" />
+                <span>Search</span>
+              </button>
+
+              {/* Navigation Items */}
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -248,7 +261,42 @@ export default function Navbar() {
                 </Link>
               ))}
               
-              {!user && (
+              {/* Mobile User Menu */}
+              {user ? (
+                <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                  <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                    {user.email}
+                  </div>
+                  <Link
+                    href="/profile"
+                    className="flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Profile</span>
+                  </Link>
+                  {user.role === 'admin' && (
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <BarChart3 className="w-4 h-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                    className="w-full flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              ) : (
                 <div className="flex flex-col space-y-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                   <Link
                     href="/auth/login"
