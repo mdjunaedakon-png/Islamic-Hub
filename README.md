@@ -71,7 +71,7 @@ A comprehensive Islamic web application built with Next.js 14, TypeScript, Tailw
    ```
 
 7. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+   Navigate to [https://islamichub-sigma.vercel.app](https://islamichub-sigma.vercel.app)
 
 ## 👤 Default Accounts
 

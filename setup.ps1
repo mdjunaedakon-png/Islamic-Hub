@@ -71,7 +71,7 @@ Write-Host "`nNext steps:" -ForegroundColor Cyan
 Write-Host "1. Make sure MongoDB is running" -ForegroundColor White
 Write-Host "2. Run: npm run seed (to populate the database)" -ForegroundColor White
 Write-Host "3. Run: npm run dev (to start the development server)" -ForegroundColor White
-Write-Host "4. Open: http://localhost:3000" -ForegroundColor White
+Write-Host "4. Open: https://islamichub-sigma.vercel.app" -ForegroundColor White
 
 Write-Host "`n📚 Default accounts after seeding:" -ForegroundColor Cyan
 Write-Host "Admin: admin@islamichub.com / admin123" -ForegroundColor White

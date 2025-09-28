@@ -433,7 +433,7 @@ export default function VideoDetailPage() {
                   );
                 }
 
-                const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}`;
+                const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : 'https://islamichub-sigma.vercel.app'}`;
 
                 return (
                   <iframe

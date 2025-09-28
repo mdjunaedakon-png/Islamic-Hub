@@ -10,7 +10,7 @@ import NoSSR from '@/components/NoSSR';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('http://localhost:3000'),
+  metadataBase: new URL('https://islamichub-sigma.vercel.app'),
   title: 'Islamic Hub - Your Complete Islamic Resource',
   description: 'A comprehensive Islamic web application featuring Quran, Hadith, Islamic videos, news, and products.',
   keywords: 'islamic, quran, hadith, islamic videos, islamic news, islamic products, muslim, islam',
