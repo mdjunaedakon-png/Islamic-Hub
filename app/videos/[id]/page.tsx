@@ -403,10 +403,10 @@ export default function VideoDetailPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Main Video Section */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* YouTube Video Player */}
             <div className="relative bg-black rounded-lg overflow-hidden">
               {(() => {
@@ -451,63 +451,61 @@ export default function VideoDetailPage() {
             {/* Video Info */}
             <div className="space-y-4">
               {/* Title and Actions */}
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">
+              <div className="flex flex-col gap-4">
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-tight">
                   {video.title}
                 </h1>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                   <button
                     onClick={handleLike}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                    className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm ${
                       isLiked
                         ? 'bg-primary-600 text-white'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                     }`}
                   >
                     <ThumbsUp className="w-4 h-4" />
-                    <span>{formatViews(video.likes || 0)}</span>
+                    <span className="hidden sm:inline">{formatViews(video.likes || 0)}</span>
+                    <span className="sm:hidden">{video.likes || 0}</span>
                   </button>
                   <button
                     onClick={handleDislike}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                    className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm ${
                       isDisliked
                         ? 'bg-red-600 text-white'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                     }`}
                   >
                     <ThumbsDown className="w-4 h-4" />
-                    <span>{formatViews(video.dislikes || 0)}</span>
+                    <span className="hidden sm:inline">{formatViews(video.dislikes || 0)}</span>
+                    <span className="sm:hidden">{video.dislikes || 0}</span>
                   </button>
                   <button
                     onClick={handleShare}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm"
                   >
                     <Share2 className="w-4 h-4" />
-                    <span>Share</span>
+                    <span className="hidden sm:inline">Share</span>
                   </button>
-                  {/* Booking button removed */}
-                  {/* <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </button> */}
                 </div>
               </div>
 
               {/* Video Stats */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center gap-1">
-                  <Eye className="w-4 h-4" />
+                  <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>{formatViews(video.views || 0)} views</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
+                  <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>{formatDate(video.createdAt)}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>{formatTime(video.duration)}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Tag className="w-4 h-4" />
+                  <Tag className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 text-xs rounded-full uppercase">
                     {video.category}
                   </span>
@@ -515,15 +513,15 @@ export default function VideoDetailPage() {
               </div>
 
               {/* Description */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-                <div className="mt-4">
-                  <p className={`text-gray-700 dark:text-gray-300 ${!showDescription ? 'line-clamp-3' : ''}`}>
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4">
+                <div>
+                  <p className={`text-sm sm:text-base text-gray-700 dark:text-gray-300 ${!showDescription ? 'line-clamp-3' : ''}`}>
                     {video.description}
                   </p>
                   {video.description.length > 200 && (
                     <button
                       onClick={() => setShowDescription(!showDescription)}
-                      className="text-primary-600 hover:text-primary-700 font-medium mt-2"
+                      className="text-primary-600 hover:text-primary-700 font-medium mt-2 text-sm"
                     >
                       {showDescription ? 'Show less' : 'Show more'}
                     </button>
@@ -531,8 +529,8 @@ export default function VideoDetailPage() {
                 </div>
 
                 {video.tags && video.tags.length > 0 && (
-                  <div className="mt-4">
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mt-3 sm:mt-4">
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {video.tags.map((tag, index) => (
                         <span
                           key={index}
@@ -547,29 +545,29 @@ export default function VideoDetailPage() {
               </div>
 
               {/* Comments Section */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
                   Comments ({comments.length})
                 </h3>
                 
                 {/* Add Comment */}
-                <div className="flex gap-3 mb-6">
-                  <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <User className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 dark:text-gray-400" />
                   </div>
                   <div className="flex-1">
                     <textarea
                       value={newComment}
                       onChange={(e) => setNewComment(e.target.value)}
                       placeholder="Add a comment..."
-                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
-                      rows={3}
+                      className="w-full p-2 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none text-sm sm:text-base"
+                      rows={2}
                     />
                     <div className="flex justify-end mt-2">
                       <button
                         onClick={handleAddComment}
                         disabled={!newComment.trim()}
-                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 sm:px-4 py-1 sm:py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                       >
                         Comment
                       </button>
@@ -578,10 +576,10 @@ export default function VideoDetailPage() {
                 </div>
 
                 {/* Comments List */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {comments.map((comment) => (
-                    <div key={comment._id} className="flex gap-3">
-                      <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center overflow-hidden">
+                    <div key={comment._id} className="flex gap-2 sm:gap-3">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                         {getCommentAuthor(comment).avatar ? (
                           <img 
                             src={getCommentAuthor(comment).avatar} 
@@ -589,27 +587,27 @@ export default function VideoDetailPage() {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                          <User className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 dark:text-gray-400" />
                         )}
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium text-gray-900 dark:text-white">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                          <span className="font-medium text-sm sm:text-base text-gray-900 dark:text-white">
                             {getCommentAuthor(comment).name}
                           </span>
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                          <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                             {formatDate(comment.createdAt)}
                           </span>
                         </div>
-                        <p className="text-gray-700 dark:text-gray-300 mb-2">
+                        <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 mb-2 break-words">
                           {comment.text}
                         </p>
-                        <div className="flex items-center gap-4">
-                          <button className="flex items-center gap-1 text-gray-500 hover:text-primary-600">
-                            <ThumbsUp className="w-4 h-4" />
+                        <div className="flex items-center gap-3 sm:gap-4">
+                          <button className="flex items-center gap-1 text-gray-500 hover:text-primary-600 text-xs sm:text-sm">
+                            <ThumbsUp className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span>{comment.likes}</span>
                           </button>
-                          <button className="text-gray-500 hover:text-primary-600">
+                          <button className="text-gray-500 hover:text-primary-600 text-xs sm:text-sm">
                             Reply
                           </button>
                         </div>
@@ -622,18 +620,18 @@ export default function VideoDetailPage() {
           </div>
 
           {/* Sidebar - Related Videos */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
               Related Videos
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {relatedVideos.map((relatedVideo) => (
                 <Link
                   key={relatedVideo._id}
                   href={`/videos/${relatedVideo._id}`}
-                  className="flex gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="flex gap-2 sm:gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
-                  <div className="relative w-40 h-24 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                  <div className="relative w-24 h-16 sm:w-32 sm:h-20 lg:w-40 lg:h-24 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
                     <Image
                       src={relatedVideo.thumbnail}
                       alt={relatedVideo.title}
@@ -645,16 +643,16 @@ export default function VideoDetailPage() {
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-gray-900 dark:text-white line-clamp-2 text-sm">
+                    <h4 className="font-medium text-gray-900 dark:text-white line-clamp-2 text-xs sm:text-sm">
                       {relatedVideo.title}
                     </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 truncate">
                       {relatedVideo.author.name}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <div className="flex items-center gap-1 sm:gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
                       <span>{formatViews(relatedVideo.views || 0)} views</span>
-                      <span>•</span>
-                      <span>{formatDate(relatedVideo.createdAt)}</span>
+                      <span className="hidden sm:inline">•</span>
+                      <span className="hidden sm:inline">{formatDate(relatedVideo.createdAt)}</span>
                     </div>
                   </div>
                 </Link>

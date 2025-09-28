@@ -133,14 +133,14 @@ export default function HadithPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                <MessageSquare className="w-8 h-8 text-primary-600" />
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2 sm:gap-3">
+                <MessageSquare className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
                 Hadith Collections
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
                 Authentic sayings and teachings of Prophet Muhammad (PBUH)
               </p>
             </div>
@@ -150,28 +150,28 @@ export default function HadithPage() {
 
       {/* Search and Filter */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="flex-1 max-w-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+            <div className="flex-1 max-w-full lg:max-w-md">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   type="text"
                   placeholder="Search hadiths..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input-field pl-10"
+                  className="input-field pl-9 sm:pl-10 w-full"
                 />
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
-                <Filter className="w-5 h-5 text-gray-500" />
+                <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
                 <select
                   value={selectedCollection}
                   onChange={(e) => setSelectedCollection(e.target.value)}
-                  className="input-field"
+                  className="input-field flex-1 sm:flex-none"
                 >
                   {collections.map((collection) => (
                     <option key={collection.value} value={collection.value}>
@@ -186,15 +186,15 @@ export default function HadithPage() {
       </div>
 
       {/* Hadith List */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {hadiths.length > 0 ? (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {hadiths.map((hadith) => (
               <Link key={hadith._id} href={`/hadith/${hadith._id}`} className="block">
-                <div className="card p-6 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${collectionColors[hadith.collectionName]}`}>
+                <div className="card p-4 sm:p-6 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                <div className="flex items-start justify-between mb-3 sm:mb-4">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${collectionColors[hadith.collectionName]}`}>
                       {getCollectionName(hadith.collectionName)}
                     </span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -202,16 +202,16 @@ export default function HadithPage() {
                     </span>
                   </div>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         bookmarkHadith(hadith._id);
                       }}
-                      className="p-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="p-1 sm:p-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                     >
-                      <Bookmark className="w-5 h-5" />
+                      <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                     <button
                       onClick={(e) => {
@@ -219,42 +219,42 @@ export default function HadithPage() {
                         e.stopPropagation();
                         shareHadith(hadith);
                       }}
-                      className="p-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="p-1 sm:p-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                     >
-                      <Share2 className="w-5 h-5" />
+                      <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="text-right text-xl leading-relaxed arabic-text text-gray-900 dark:text-white">
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="text-right text-lg sm:text-xl leading-relaxed arabic-text text-gray-900 dark:text-white">
                     {hadith.arabicText}
                   </div>
                   
-                  <div className="border-l-4 border-primary-200 dark:border-primary-800 pl-4">
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                  <div className="border-l-4 border-primary-200 dark:border-primary-800 pl-3 sm:pl-4">
+                    <p className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                       {hadith.englishTranslation}
                     </p>
                   </div>
                   
-                  <div className="border-l-4 border-gray-200 dark:border-gray-700 pl-4">
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <div className="border-l-4 border-gray-200 dark:border-gray-700 pl-3 sm:pl-4">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                       {hadith.banglaTranslation}
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <BookOpen className="w-4 h-4" />
-                      <span>{hadith.book}</span>
+                <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <BookOpen className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="truncate">{hadith.book}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4" />
-                      <span>{hadith.chapter}</span>
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="truncate">{hadith.chapter}</span>
                     </div>
-                    <div>
+                    <div className="truncate">
                       <span>Narrated by: {hadith.narrator}</span>
                     </div>
                     {hadith.volume && (
@@ -270,7 +270,7 @@ export default function HadithPage() {
                   </div>
                   
                   {hadith.tags.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-2">
+                    <div className="mt-2 sm:mt-3 flex flex-wrap gap-1 sm:gap-2">
                       {hadith.tags.map((tag, index) => (
                         <span
                           key={index}
@@ -288,24 +288,25 @@ export default function HadithPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8">
+              <div className="flex items-center justify-center gap-2 mt-6 sm:mt-8">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="btn-secondary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-secondary flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 >
                   <ChevronLeft className="w-4 h-4" />
-                  Previous
+                  <span className="hidden sm:inline">Previous</span>
+                  <span className="sm:hidden">Prev</span>
                 </button>
                 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     const page = i + 1;
                     return (
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
-                        className={`w-10 h-10 rounded-lg ${
+                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg text-sm ${
                           currentPage === page
                             ? 'bg-primary-600 text-white'
                             : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
@@ -320,21 +321,22 @@ export default function HadithPage() {
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="btn-secondary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-secondary flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 >
-                  Next
+                  <span className="hidden sm:inline">Next</span>
+                  <span className="sm:hidden">Next</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             )}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <MessageSquare className="w-24 h-24 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          <div className="text-center py-8 sm:py-12">
+            <MessageSquare className="w-16 h-16 sm:w-24 sm:h-24 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
               No hadiths found
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4">
               {searchTerm || selectedCollection 
                 ? 'Try adjusting your search or filter criteria.'
                 : 'No hadiths available at the moment.'

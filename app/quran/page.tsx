@@ -162,51 +162,52 @@ export default function QuranPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                <BookOpen className="w-8 h-8 text-primary-600" />
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2 sm:gap-3">
+                <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
                 Holy Quran
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
                 Read, listen, and reflect on the words of Allah
               </p>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   type="text"
                   placeholder="Search surahs..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input-field pl-10 w-64"
+                  className="input-field pl-9 sm:pl-10 w-full sm:w-64"
                 />
               </div>
               
               <button
                 onClick={() => setShowSurahList(!showSurahList)}
-                className="btn-secondary flex items-center gap-2"
+                className="btn-secondary flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 <List className="w-4 h-4" />
-                Surah List
+                <span className="hidden sm:inline">Surah List</span>
+                <span className="sm:hidden">List</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {/* Surah List Sidebar */}
           <div className={`lg:col-span-1 ${showSurahList ? 'block' : 'hidden lg:block'}`}>
-            <div className="card p-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="card p-3 sm:p-4">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-sm sm:text-base">
                 Surahs ({filteredSurahs.length})
               </h3>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+              <div className="space-y-1 sm:space-y-2 max-h-80 sm:max-h-96 overflow-y-auto">
                 {filteredSurahs.map((surah) => (
                   <button
                     key={surah._id}
@@ -214,22 +215,22 @@ export default function QuranPage() {
                       fetchSurah(surah.surahNumber);
                       setShowSurahList(false);
                     }}
-                    className={`w-full text-left p-3 rounded-lg transition-colors ${
+                    className={`w-full text-left p-2 sm:p-3 rounded-lg transition-colors ${
                       selectedSurah?.surahNumber === surah.surahNumber
                         ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
                         : 'hover:bg-gray-100 dark:hover:bg-gray-700'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium text-sm">
+                      <div className="min-w-0 flex-1">
+                        <div className="font-medium text-xs sm:text-sm truncate">
                           {surah.surahNumber}. {surah.surahNameEnglish}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
                           {surah.surahNameArabic}
                         </div>
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <div className="text-xs text-gray-500 dark:text-gray-400 ml-2 flex-shrink-0">
                         {surah.totalAyahs} ayahs
                       </div>
                     </div>
@@ -242,10 +243,10 @@ export default function QuranPage() {
           {/* Main Content */}
           <div className="lg:col-span-3">
             {selectedSurah ? (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Surah Header */}
-                <div className="card p-6 text-center">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="card p-4 sm:p-6 text-center">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
                     <div></div>
                     <div className="flex items-center gap-2">
                       <BookmarkButton
@@ -262,73 +263,73 @@ export default function QuranPage() {
                       />
                     </div>
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                     {selectedSurah.surahNumber}. {selectedSurah.surahNameEnglish}
                   </h2>
-                  <h3 className="text-3xl font-bold text-primary-600 mb-2 arabic-text">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-primary-600 mb-2 arabic-text">
                     {selectedSurah.surahNameArabic}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                     {selectedSurah.totalAyahs} ayahs • 
                     {selectedSurah.revelationPlace === 'makkah' ? ' Makkah' : ' Madinah'}
                   </p>
                 </div>
 
                 {/* Ayahs */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {selectedSurah.ayahs.map((ayah) => (
                     <div
                       key={ayah.ayahNumber}
-                      className={`card p-6 ${
+                      className={`card p-3 sm:p-4 lg:p-6 ${
                         selectedAyah === ayah.ayahNumber ? 'ring-2 ring-primary-500' : ''
                       }`}
                     >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <span className="bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-sm font-medium px-3 py-1 rounded-full">
+                      <div className="flex items-start justify-between mb-3 sm:mb-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <span className="bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full">
                             {ayah.ayahNumber}
                           </span>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 sm:gap-2">
                             <button
                               onClick={() => playAyah(ayah)}
-                              className="p-2 text-primary-600 hover:bg-primary-100 dark:hover:bg-primary-900 rounded-lg transition-colors"
+                              className="p-1 sm:p-2 text-primary-600 hover:bg-primary-100 dark:hover:bg-primary-900 rounded-lg transition-colors"
                             >
                               {isPlaying && selectedAyah === ayah.ayahNumber ? (
-                                <Pause className="w-5 h-5" />
+                                <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
                               ) : (
-                                <Play className="w-5 h-5" />
+                                <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                               )}
                             </button>
                             <button
                               onClick={() => pauseAudio()}
-                              className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                              className="p-1 sm:p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                             >
-                              <Volume2 className="w-5 h-5" />
+                              <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
                             </button>
                           </div>
                         </div>
                         
                         <button
                           onClick={() => bookmarkAyah(selectedSurah.surahNumber, ayah.ayahNumber)}
-                          className="p-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                          className="p-1 sm:p-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                         >
-                          <Bookmark className="w-5 h-5" />
+                          <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
                         </button>
                       </div>
 
-                      <div className="space-y-4">
-                        <div className="text-right text-2xl leading-relaxed arabic-text text-gray-900 dark:text-white">
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="text-right text-lg sm:text-xl lg:text-2xl leading-relaxed arabic-text text-gray-900 dark:text-white">
                           {ayah.arabicText}
                         </div>
                         
-                        <div className="border-l-4 border-primary-200 dark:border-primary-800 pl-4">
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <div className="border-l-4 border-primary-200 dark:border-primary-800 pl-3 sm:pl-4">
+                          <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
                             {ayah.englishTranslation}
                           </p>
                         </div>
                         
-                        <div className="border-l-4 border-gray-200 dark:border-gray-700 pl-4">
-                          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <div className="border-l-4 border-gray-200 dark:border-gray-700 pl-3 sm:pl-4">
+                          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                             {ayah.banglaTranslation}
                           </p>
                         </div>
