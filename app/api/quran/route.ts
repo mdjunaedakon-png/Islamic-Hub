@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Quran from '@/models/Quran';
 import { getCurrentUser } from '@/lib/auth';
-import { mockSurahs } from '@/lib/mockData';
 
 // GET all surahs
 export async function GET(request: NextRequest) {
@@ -65,54 +64,10 @@ export async function GET(request: NextRequest) {
       });
     } catch (dbError) {
       console.error('Database connection error:', dbError);
-      console.log('🔄 Using mock data for demo purposes');
-      
-      // If surah number is specified, return that specific surah from mock data
-      if (surahNumber) {
-        const surah = mockSurahs.find(s => s.surahNumber === parseInt(surahNumber));
-        if (surah) {
-          return NextResponse.json({ surah });
-        } else {
-          return NextResponse.json(
-            { error: 'Surah not found' },
-            { status: 404 }
-          );
-        }
-      }
-
-      // Filter mock data based on search and revelation place
-      let filteredSurahs = mockSurahs;
-      
-      if (revelationPlace) {
-        filteredSurahs = filteredSurahs.filter(surah => surah.revelationPlace === revelationPlace);
-      }
-      
-      if (search) {
-        filteredSurahs = filteredSurahs.filter(surah =>
-          surah.surahName.toLowerCase().includes(search.toLowerCase()) ||
-          surah.surahNameArabic.toLowerCase().includes(search.toLowerCase()) ||
-          surah.surahNameEnglish.toLowerCase().includes(search.toLowerCase()) ||
-          surah.ayahs.some(ayah => 
-            ayah.arabicText.toLowerCase().includes(search.toLowerCase()) ||
-            ayah.englishTranslation.toLowerCase().includes(search.toLowerCase()) ||
-            ayah.banglaTranslation.toLowerCase().includes(search.toLowerCase())
-          )
-        );
-      }
-
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedSurahs = filteredSurahs.slice(startIndex, endIndex);
-
-      return NextResponse.json({
-        surahs: paginatedSurahs,
-        pagination: {
-          page,
-          limit,
-          total: filteredSurahs.length,
-          pages: Math.ceil(filteredSurahs.length / limit),
-        },
-      });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Get surahs error:', error);
@@ -188,24 +143,10 @@ export async function POST(request: NextRequest) {
       }, { status: 201 });
     } catch (dbError) {
       console.error('Database save error:', dbError);
-      
-      // For demo purposes, create a mock surah response
-      const mockSurah = {
-        _id: Date.now().toString(),
-        surahNumber,
-        surahName,
-        surahNameArabic,
-        surahNameEnglish,
-        ayahs,
-        totalAyahs,
-        revelationPlace,
-        createdAt: new Date().toISOString(),
-      };
-
-      return NextResponse.json({
-        message: 'Surah created successfully (demo mode)',
-        surah: mockSurah,
-      }, { status: 201 });
+      return NextResponse.json(
+        { error: 'Database save error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Create surah error:', error);

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Quran from '@/models/Quran';
 import { getCurrentUser } from '@/lib/auth';
-import { mockSurahs } from '@/lib/mockData';
 
 // GET single surah
 export async function GET(
@@ -22,18 +21,10 @@ export async function GET(
       console.error('Database error:', dbError);
     }
 
-    // Fallback to mock data
-    console.log('Using mock data for surah:', params.id);
-    const mockSurah = mockSurahs.find(s => s._id === params.id);
-    
-    if (!mockSurah) {
-      return NextResponse.json(
-        { error: 'Surah not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ surah: mockSurah });
+    return NextResponse.json(
+      { error: 'Surah not found' },
+      { status: 404 }
+    );
   } catch (error) {
     console.error('Get surah error:', error);
     return NextResponse.json(
@@ -98,23 +89,10 @@ export async function PUT(
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      // Return mock response for demo
-      const mockSurah = {
-        _id: params.id,
-        surahName,
-        surahNameArabic,
-        surahNameEnglish,
-        ayahs,
-        totalAyahs,
-        revelationPlace,
-        updatedAt: new Date().toISOString(),
-      };
-
-      return NextResponse.json({
-        message: 'Surah updated successfully (demo mode)',
-        surah: mockSurah,
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Update surah error:', error);
@@ -159,10 +137,10 @@ export async function DELETE(
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      return NextResponse.json({
-        message: 'Surah deleted successfully (demo mode)',
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Delete surah error:', error);

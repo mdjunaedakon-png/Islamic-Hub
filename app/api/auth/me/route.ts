@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { getCurrentUser } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
-import { mockUser, mockAdmin } from '@/lib/mockData';
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,9 +20,14 @@ export async function GET(request: NextRequest) {
       const userData = await User.findById(user.id).select('-password');
       
       if (!userData) {
+        // If the token points to a user that doesn't exist in the new DB,
+        // clear the cookie and ask the client to re-authenticate
+        try {
+          cookies().set('token', '', { expires: new Date(0), path: '/' });
+        } catch {}
         return NextResponse.json(
-          { error: 'User not found' },
-          { status: 404 }
+          { error: 'Not authenticated' },
+          { status: 401 }
         );
       }
 
@@ -37,12 +42,10 @@ export async function GET(request: NextRequest) {
       });
     } catch (dbError) {
       console.error('Database connection error:', dbError);
-      console.log('🔄 Using mock data for demo purposes');
-      
-      // Return mock user data for demo
-      return NextResponse.json({
-        user: user.role === 'admin' ? mockAdmin : mockUser,
-      });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Get user error:', error);

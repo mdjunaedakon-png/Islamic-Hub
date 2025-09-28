@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Video from '@/models/Video';
 import { getCurrentUser } from '@/lib/auth';
-import { mockVideos } from '@/lib/mockData';
 
 export async function GET(
   request: NextRequest,
@@ -35,18 +34,10 @@ export async function GET(
       console.error('Database error:', dbError);
     }
 
-    // Fallback to mock data
-    console.log('Using mock data for video:', params.id);
-    const mockVideo = mockVideos.find(v => v._id === params.id);
-    
-    if (!mockVideo) {
-      return NextResponse.json(
-        { error: 'Video not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ video: mockVideo });
+    return NextResponse.json(
+      { error: 'Video not found' },
+      { status: 404 }
+    );
   } catch (error) {
     console.error('Get video error:', error);
     return NextResponse.json(

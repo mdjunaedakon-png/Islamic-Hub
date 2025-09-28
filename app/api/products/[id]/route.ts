@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Product from '@/models/Product';
-import { mockProducts } from '@/lib/mockData';
 
 export async function GET(
   request: NextRequest,
@@ -49,21 +48,10 @@ export async function GET(
       }, { headers });
     } catch (dbError) {
       console.error('📦 Products API: Database connection error:', dbError);
-      console.log('🔄 Products API: Using mock data for demo purposes');
-      
-      // Find mock product by ID
-      const mockProduct = mockProducts.find(product => product._id === params.id);
-      
-      if (!mockProduct) {
-        return NextResponse.json(
-          { error: 'Product not found' },
-          { status: 404, headers }
-        );
-      }
-
-      return NextResponse.json({
-        product: mockProduct,
-      }, { headers });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500, headers }
+      );
     }
   } catch (error) {
     console.error('📦 Products API: Get product error:', error);

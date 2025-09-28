@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Hadith from '@/models/Hadith';
 import { getCurrentUser } from '@/lib/auth';
-import { mockHadiths } from '@/lib/mockData';
 
 // GET all hadiths
 export async function GET(request: NextRequest) {
@@ -56,44 +55,10 @@ export async function GET(request: NextRequest) {
       });
     } catch (dbError) {
       console.error('Database connection error:', dbError);
-      console.log('🔄 Using mock data for demo purposes');
-      
-      // Filter mock data based on search and collection
-      let filteredHadiths = mockHadiths;
-      
-      if (collection) {
-        filteredHadiths = filteredHadiths.filter(hadith => hadith.collectionName === collection);
-      }
-      
-      if (chapter) {
-        filteredHadiths = filteredHadiths.filter(hadith => 
-          hadith.chapter.toLowerCase().includes(chapter.toLowerCase())
-        );
-      }
-      
-      if (search) {
-        filteredHadiths = filteredHadiths.filter(hadith =>
-          hadith.arabicText.toLowerCase().includes(search.toLowerCase()) ||
-          hadith.englishTranslation.toLowerCase().includes(search.toLowerCase()) ||
-          hadith.banglaTranslation.toLowerCase().includes(search.toLowerCase()) ||
-          hadith.narrator.toLowerCase().includes(search.toLowerCase()) ||
-          hadith.chapter.toLowerCase().includes(search.toLowerCase())
-        );
-      }
-
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedHadiths = filteredHadiths.slice(startIndex, endIndex);
-
-      return NextResponse.json({
-        hadiths: paginatedHadiths,
-        pagination: {
-          page,
-          limit,
-          total: filteredHadiths.length,
-          pages: Math.ceil(filteredHadiths.length / limit),
-        },
-      });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Get hadiths error:', error);
@@ -173,28 +138,10 @@ export async function POST(request: NextRequest) {
       }, { status: 201 });
     } catch (dbError) {
       console.error('Database save error:', dbError);
-      
-      // For demo purposes, create a mock hadith response
-      const mockHadith = {
-        _id: Date.now().toString(),
-        collectionName,
-        hadithNumber,
-        arabicText,
-        englishTranslation,
-        banglaTranslation,
-        narrator,
-        chapter,
-        book,
-        volume: volume || '',
-        page: page || '',
-        tags: Array.isArray(tags) ? tags : [],
-        createdAt: new Date().toISOString(),
-      };
-
-      return NextResponse.json({
-        message: 'Hadith created successfully (demo mode)',
-        hadith: mockHadith,
-      }, { status: 201 });
+      return NextResponse.json(
+        { error: 'Database save error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Create hadith error:', error);

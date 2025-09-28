@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Hadith from '@/models/Hadith';
 import { getCurrentUser } from '@/lib/auth';
-import { mockHadiths } from '@/lib/mockData';
 
 // GET single hadith
 export async function GET(
@@ -22,18 +21,10 @@ export async function GET(
       console.error('Database error:', dbError);
     }
 
-    // Fallback to mock data
-    console.log('Using mock data for hadith:', params.id);
-    const mockHadith = mockHadiths.find(h => h._id === params.id);
-    
-    if (!mockHadith) {
-      return NextResponse.json(
-        { error: 'Hadith not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ hadith: mockHadith });
+    return NextResponse.json(
+      { error: 'Hadith not found' },
+      { status: 404 }
+    );
   } catch (error) {
     console.error('Get hadith error:', error);
     return NextResponse.json(
@@ -108,28 +99,10 @@ export async function PUT(
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      // Return mock response for demo
-      const mockHadith = {
-        _id: params.id,
-        collectionName,
-        hadithNumber,
-        arabicText,
-        englishTranslation,
-        banglaTranslation,
-        narrator,
-        chapter,
-        book,
-        volume: volume || '',
-        page: page || '',
-        tags: Array.isArray(tags) ? tags : [],
-        updatedAt: new Date().toISOString(),
-      };
-
-      return NextResponse.json({
-        message: 'Hadith updated successfully (demo mode)',
-        hadith: mockHadith,
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Update hadith error:', error);
@@ -174,10 +147,10 @@ export async function DELETE(
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      return NextResponse.json({
-        message: 'Hadith deleted successfully (demo mode)',
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Delete hadith error:', error);

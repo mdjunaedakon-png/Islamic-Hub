@@ -13,6 +13,7 @@ import {
   X
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { generateThumbnailFromYouTubeUrl } from '@/lib/youtubeUtils';
 
 interface User {
   id: string;
@@ -61,10 +62,24 @@ export default function UploadVideoPage() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Auto-generate thumbnail for YouTube URLs
+    if (name === 'videoUrl' && value.includes('youtube.com')) {
+      const thumbnail = generateThumbnailFromYouTubeUrl(value);
+      if (thumbnail) {
+        setFormData(prev => ({
+          ...prev,
+          thumbnail: thumbnail
+        }));
+        toast.success('YouTube thumbnail auto-generated!');
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -210,11 +225,11 @@ export default function UploadVideoPage() {
                   value={formData.thumbnail}
                   onChange={handleChange}
                   className="input-field pl-10"
-                  placeholder="https://images.unsplash.com/photo-..."
+                  placeholder="Auto-generated for YouTube URLs"
                 />
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Recommended size: 400x250px
+                YouTube thumbnails are auto-generated. For other platforms, use a direct image URL.
               </p>
             </div>
 

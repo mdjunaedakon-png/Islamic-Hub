@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Product from '@/models/Product';
 import { getCurrentUser } from '@/lib/auth';
-import { mockProducts } from '@/lib/mockData';
 
 export async function GET(request: NextRequest) {
   try {
@@ -60,40 +59,10 @@ export async function GET(request: NextRequest) {
       }, { headers });
     } catch (dbError) {
       console.error('📦 Products API: Database connection error:', dbError);
-      console.log('🔄 Products API: Using mock data for demo purposes');
-      console.log('📦 Products API: Mock products count:', mockProducts.length);
-      
-      // Filter mock data based on search and category
-      let filteredProducts = mockProducts;
-      
-      if (category) {
-        filteredProducts = filteredProducts.filter(product => product.category === category);
-      }
-      
-      if (featured === 'true') {
-        filteredProducts = filteredProducts.filter(product => product.featured);
-      }
-      
-      if (search) {
-        filteredProducts = filteredProducts.filter(product => 
-          product.name.toLowerCase().includes(search.toLowerCase()) ||
-          product.description.toLowerCase().includes(search.toLowerCase())
-        );
-      }
-      
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
-      
-      return NextResponse.json({
-        products: paginatedProducts,
-        pagination: {
-          page,
-          limit,
-          total: filteredProducts.length,
-          pages: Math.ceil(filteredProducts.length / limit),
-        },
-      }, { headers });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500, headers }
+      );
     }
   } catch (error) {
     console.error('📦 Products API: Get products error:', error);
@@ -187,37 +156,12 @@ export async function POST(request: NextRequest) {
       }, { status: 201, headers });
     } catch (dbError) {
       console.error('📦 Products API: Database save error:', dbError);
-      console.log('📦 Products API: Creating mock product response for demo');
-      
-      // For demo purposes, create a mock product response
-      const mockProduct = {
-        _id: Date.now().toString(),
-        name,
-        description,
-        price,
-        originalPrice: originalPrice || 0,
-        images: Array.isArray(images) ? images : [images],
-        category,
-        stock: stock || 0,
-        sku,
-        weight: weight || 0,
-        dimensions: dimensions || null,
-        features: Array.isArray(features) ? features : [],
-        tags: Array.isArray(tags) ? tags : [],
-        featured: featured || false,
-        active: true,
-        createdAt: new Date().toISOString(),
-      };
-
       const headers = new Headers();
       headers.set('Access-Control-Allow-Origin', '*');
-      headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-      headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-      return NextResponse.json({
-        message: 'Product created successfully (demo mode)',
-        product: mockProduct,
-      }, { status: 201, headers });
+      return NextResponse.json(
+        { error: 'Database save error' },
+        { status: 500, headers }
+      );
     }
   } catch (error) {
     console.error('Create product error:', error);

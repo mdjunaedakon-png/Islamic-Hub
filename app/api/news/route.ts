@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import News from '@/models/News';
 import { getCurrentUser } from '@/lib/auth';
-import { mockNews } from '@/lib/mockData';
 
 export async function GET(request: NextRequest) {
   try {
@@ -54,40 +53,10 @@ export async function GET(request: NextRequest) {
       });
     } catch (dbError) {
       console.error('Database connection error:', dbError);
-      console.log('🔄 Using mock data for demo purposes');
-      
-      // Filter mock data based on search and category
-      let filteredNews = mockNews;
-      
-      if (category) {
-        filteredNews = filteredNews.filter(article => article.category === category);
-      }
-      
-      if (featured === 'true') {
-        filteredNews = filteredNews.filter(article => article.featured);
-      }
-      
-      if (search) {
-        filteredNews = filteredNews.filter(article => 
-          article.title.toLowerCase().includes(search.toLowerCase()) ||
-          article.content.toLowerCase().includes(search.toLowerCase()) ||
-          article.excerpt.toLowerCase().includes(search.toLowerCase())
-        );
-      }
-      
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedNews = filteredNews.slice(startIndex, endIndex);
-      
-      return NextResponse.json({
-        news: paginatedNews,
-        pagination: {
-          page,
-          limit,
-          total: filteredNews.length,
-          pages: Math.ceil(filteredNews.length / limit),
-        },
-      });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Get news error:', error);

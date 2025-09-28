@@ -104,18 +104,10 @@ export async function POST(
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      // Return mock response for demo
-      return NextResponse.json({
-        message: `${action} action completed (demo mode)`,
-        updated: true,
-        likes: Math.floor(Math.random() * 100) + 50,
-        dislikes: Math.floor(Math.random() * 10),
-        bookmarks: Math.floor(Math.random() * 20) + 10,
-        userLiked: action === 'like',
-        userDisliked: action === 'dislike',
-        userBookmarked: action === 'bookmark'
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Video interaction error:', error);
@@ -169,16 +161,10 @@ export async function GET(
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      // Return mock response for demo
-      return NextResponse.json({
-        userLiked: false,
-        userDisliked: false,
-        userBookmarked: false,
-        likes: Math.floor(Math.random() * 100) + 50,
-        dislikes: Math.floor(Math.random() * 10),
-        bookmarks: Math.floor(Math.random() * 20) + 10
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Get video interactions error:', error);

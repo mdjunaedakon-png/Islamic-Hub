@@ -14,7 +14,7 @@ import {
   Upload
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import BookingButton from '@/components/BookingButton';
+// Booking system removed
 
 interface Video {
   _id: string;
@@ -253,17 +253,7 @@ export default function HomePage() {
                       <span className="text-sm text-gray-500 dark:text-gray-400">
                         {formatDate(video.createdAt)}
                       </span>
-                      <BookingButton
-                        videoId={video._id}
-                        videoTitle={video.title}
-                        videoDescription={video.description}
-                        videoThumbnail={video.thumbnail}
-                        videoUrl={video.videoUrl}
-                        videoCategory={video.category}
-                        videoDuration={video.duration}
-                        videoAuthor={video.author}
-                        size="sm"
-                      />
+                      {/* Booking button removed */}
                     </div>
                   </div>
                 </div>

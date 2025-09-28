@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import News from '@/models/News';
-import { mockNews } from '@/lib/mockData';
 
 export async function GET(
   request: NextRequest,
@@ -48,21 +47,10 @@ export async function GET(
       }, { headers });
     } catch (dbError) {
       console.error('📰 News API: Database connection error:', dbError);
-      console.log('🔄 News API: Using mock data for demo purposes');
-      
-      // Find mock news by ID
-      const mockArticle = mockNews.find(article => article._id === params.id);
-      
-      if (!mockArticle) {
-        return NextResponse.json(
-          { error: 'News article not found' },
-          { status: 404, headers }
-        );
-      }
-
-      return NextResponse.json({
-        news: mockArticle,
-      }, { headers });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500, headers }
+      );
     }
   } catch (error) {
     console.error('📰 News API: Get news error:', error);

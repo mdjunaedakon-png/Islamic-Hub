@@ -36,10 +36,10 @@ export async function DELETE(
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      return NextResponse.json({
-        message: 'Bookmark removed successfully (demo mode)',
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Delete bookmark error:', error);

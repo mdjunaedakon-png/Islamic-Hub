@@ -86,26 +86,7 @@ interface Bookmark {
   createdAt: string;
 }
 
-interface Booking {
-  _id: string;
-  video: string;
-  videoTitle: string;
-  videoDescription: string;
-  videoThumbnail: string;
-  videoUrl: string;
-  videoCategory: string;
-  videoDuration: number;
-  videoAuthor: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-  bookingDate: string;
-  status: 'active' | 'completed' | 'cancelled';
-  notes?: string;
-  reminderDate?: string;
-  createdAt: string;
-}
+// Booking system removed
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
@@ -136,8 +117,7 @@ export default function ProfilePage() {
   const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([]);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [bookmarksLoading, setBookmarksLoading] = useState(false);
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [bookingsLoading, setBookingsLoading] = useState(false);
+  // Booking system removed
   const router = useRouter();
 
   useEffect(() => {
@@ -145,7 +125,7 @@ export default function ProfilePage() {
     fetchUserStats();
     fetchUserActivity();
     fetchBookmarks();
-    fetchBookings();
+    // Booking system removed
   }, []);
 
   const fetchUser = async () => {
@@ -214,22 +194,7 @@ export default function ProfilePage() {
     }
   };
 
-  const fetchBookings = async () => {
-    setBookingsLoading(true);
-    try {
-      const response = await fetch('/api/bookings?limit=20');
-      if (response.ok) {
-        const data = await response.json();
-        setBookings(data.bookings);
-      } else {
-        console.error('Failed to fetch bookings');
-      }
-    } catch (error) {
-      console.error('Error fetching bookings:', error);
-    } finally {
-      setBookingsLoading(false);
-    }
-  };
+  // Booking system removed
 
   const handleEdit = () => {
     setEditing(true);
@@ -699,84 +664,7 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {/* Bookings */}
-            <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
-                Your Bookings
-              </h3>
-              <div className="space-y-3">
-                {bookingsLoading ? (
-                  <div className="text-center py-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-2"></div>
-                    <p className="text-gray-500 dark:text-gray-400">Loading bookings...</p>
-                  </div>
-                ) : bookings.length > 0 ? (
-                  bookings.slice(0, 6).map((booking) => (
-                    <div key={booking._id} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                      <div className="flex-shrink-0">
-                        <img
-                          src={booking.videoThumbnail}
-                          alt={booking.videoTitle}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-gray-900 dark:text-white truncate">
-                          {booking.videoTitle}
-                        </h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                          {booking.videoDescription}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            booking.status === 'active' 
-                              ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
-                              : booking.status === 'completed'
-                              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                              : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
-                          }`}>
-                            {booking.status}
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {formatDate(booking.bookingDate)}
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {booking.videoCategory}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <Link
-                          href={`/videos/${booking.video}`}
-                          className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium"
-                        >
-                          View
-                        </Link>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8">
-                    <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 dark:text-gray-400 mb-2">No bookings yet</p>
-                    <p className="text-sm text-gray-400 dark:text-gray-500">
-                      Start booking videos to watch later
-                    </p>
-                  </div>
-                )}
-              </div>
-              {bookings.length > 6 && (
-                <div className="mt-4 text-center">
-                  <Link
-                    href="/profile/bookings"
-                    className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium"
-                  >
-                    View all bookings ({bookings.length})
-                  </Link>
-                </div>
-              )}
-            </div>
+            {/* Booking section removed */}
 
             {/* Content Statistics (for admins) */}
             {user.role === 'admin' && (

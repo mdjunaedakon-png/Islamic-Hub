@@ -42,17 +42,10 @@ export async function GET(request: NextRequest) {
       });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      // Return empty bookmarks for demo
-      return NextResponse.json({
-        bookmarks: [],
-        pagination: {
-          page,
-          limit,
-          total: 0,
-          pages: 0,
-        },
-      });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Get bookmarks error:', error);
@@ -122,25 +115,10 @@ export async function POST(request: NextRequest) {
       }, { status: 201 });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      // For demo purposes, create a mock bookmark
-      const mockBookmark = {
-        _id: Date.now().toString(),
-        user: user.id,
-        contentType,
-        contentId,
-        contentTitle,
-        contentDescription: contentDescription || '',
-        contentImage: contentImage || '',
-        contentUrl: contentUrl || '',
-        metadata: metadata || {},
-        createdAt: new Date().toISOString(),
-      };
-
-      return NextResponse.json({
-        message: 'Bookmark created successfully (demo mode)',
-        bookmark: mockBookmark,
-      }, { status: 201 });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Create bookmark error:', error);

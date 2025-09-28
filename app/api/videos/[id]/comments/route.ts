@@ -33,69 +33,11 @@ export async function GET(
     } catch (dbError) {
       console.error('Database error:', dbError);
     }
-
-    // Fallback to mock comments
-    const mockComments = [
-      {
-        _id: '507f1f77bcf86cd799439021',
-        text: 'MashaAllah, very informative lecture. May Allah bless the speaker.',
-        user: {
-          _id: '507f1f77bcf86cd799439031',
-          name: 'Ahmad Hassan',
-          email: 'ahmad@example.com',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face'
-        },
-        author: {
-          _id: '507f1f77bcf86cd799439031',
-          name: 'Ahmad Hassan',
-          email: 'ahmad@example.com',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face'
-        },
-        createdAt: new Date().toISOString(),
-        likes: 12,
-        replies: []
-      },
-      {
-        _id: '507f1f77bcf86cd799439022',
-        text: 'JazakAllah khair for sharing this beautiful nasheed.',
-        user: {
-          _id: '507f1f77bcf86cd799439032',
-          name: 'Fatima Ali',
-          email: 'fatima@example.com',
-          avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face'
-        },
-        author: {
-          _id: '507f1f77bcf86cd799439032',
-          name: 'Fatima Ali',
-          email: 'fatima@example.com',
-          avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face'
-        },
-        createdAt: new Date(Date.now() - 3600000).toISOString(),
-        likes: 8,
-        replies: []
-      },
-      {
-        _id: '507f1f77bcf86cd799439023',
-        text: 'SubhanAllah, this really touched my heart. May Allah reward you for sharing.',
-        user: {
-          _id: '507f1f77bcf86cd799439033',
-          name: 'Omar Abdullah',
-          email: 'omar@example.com',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face'
-        },
-        author: {
-          _id: '507f1f77bcf86cd799439033',
-          name: 'Omar Abdullah',
-          email: 'omar@example.com',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face'
-        },
-        createdAt: new Date(Date.now() - 7200000).toISOString(),
-        likes: 15,
-        replies: []
-      }
-    ];
-
-    return NextResponse.json({ comments: mockComments });
+    
+    return NextResponse.json(
+      { error: 'Video not found' },
+      { status: 404 }
+    );
   } catch (error) {
     console.error('Get comments error:', error);
     return NextResponse.json(
@@ -168,32 +110,10 @@ export async function POST(
       }, { status: 201 });
     } catch (dbError) {
       console.error('Database error:', dbError);
-      
-      // Return mock comment for demo
-      const mockComment = {
-        _id: Date.now().toString(),
-        text: text.trim(),
-        user: {
-          _id: user.id,
-          name: user.name,
-          email: user.email,
-          avatar: user.avatar || ''
-        },
-        author: {
-          _id: user.id,
-          name: user.name,
-          email: user.email,
-          avatar: user.avatar || ''
-        },
-        createdAt: new Date().toISOString(),
-        likes: 0,
-        replies: []
-      };
-
-      return NextResponse.json({
-        message: 'Comment added successfully (demo mode)',
-        comment: mockComment
-      }, { status: 201 });
+      return NextResponse.json(
+        { error: 'Database error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Add comment error:', error);

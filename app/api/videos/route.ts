@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Video from '@/models/Video';
 import { getCurrentUser } from '@/lib/auth';
-import { mockVideos } from '@/lib/mockData';
 
 export async function GET(request: NextRequest) {
   try {
@@ -55,35 +54,10 @@ export async function GET(request: NextRequest) {
       });
     } catch (dbError) {
       console.error('Database connection error:', dbError);
-      console.log('🔄 Using mock data for demo purposes');
-      
-      // Filter mock data based on search and category
-      let filteredVideos = mockVideos;
-      
-      if (category) {
-        filteredVideos = filteredVideos.filter(video => video.category === category);
-      }
-      
-      if (search) {
-        filteredVideos = filteredVideos.filter(video => 
-          video.title.toLowerCase().includes(search.toLowerCase()) ||
-          video.description.toLowerCase().includes(search.toLowerCase())
-        );
-      }
-      
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedVideos = filteredVideos.slice(startIndex, endIndex);
-      
-      return NextResponse.json({
-        videos: paginatedVideos,
-        pagination: {
-          page,
-          limit,
-          total: filteredVideos.length,
-          pages: Math.ceil(filteredVideos.length / limit),
-        },
-      });
+      return NextResponse.json(
+        { error: 'Database connection error' },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('Get videos error:', error);
