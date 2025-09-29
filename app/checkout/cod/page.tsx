@@ -12,18 +12,12 @@ export default function CodCheckoutPage() {
   const [city, setCity] = useState('');
   const [notes, setNotes] = useState('');
   const cart = getCart();
-  const total = getCartTotal(cart);
+  const total = getCartTotal();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const items = cart.map((i) => ({
-        productId: i._id,
-        name: i.name,
-        image: i.image,
-        price: i.price,
-        quantity: i.quantity,
-      }));
+      const items = cart; // already has productId, name, image, price, quantity
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
