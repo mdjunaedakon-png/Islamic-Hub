@@ -33,8 +33,13 @@ export default function UsersPage() {
 
   useEffect(() => {
     fetchUser();
-    fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (user && user.role === 'admin') {
+      fetchUsers();
+    }
+  }, [user, searchTerm, roleFilter]);
 
   const fetchUser = async () => {
     try {
@@ -42,7 +47,6 @@ export default function UsersPage() {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-        
         if (data.user.role !== 'admin') {
           router.push('/');
           toast.error('Access denied. Admin privileges required.');
@@ -59,46 +63,25 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
-      // In a real app, you would have a users API endpoint
-      // For now, we'll use mock data
-      const mockUsers = [
-        {
-          id: '1',
-          name: 'John Doe',
-          email: 'john@example.com',
-          role: 'user',
-          avatar: '',
-          createdAt: '2024-01-15T10:30:00Z',
-        },
-        {
-          id: '2',
-          name: 'Jane Smith',
-          email: 'jane@example.com',
-          role: 'user',
-          avatar: '',
-          createdAt: '2024-01-20T14:45:00Z',
-        },
-        {
-          id: '3',
-          name: 'Admin User',
-          email: 'admin@islamichub.com',
-          role: 'admin',
-          avatar: '',
-          createdAt: '2024-01-01T09:00:00Z',
-        },
-      ];
-      setUsers(mockUsers);
+      const params = new URLSearchParams();
+      if (searchTerm) params.append('search', searchTerm);
+      if (roleFilter) params.append('role', roleFilter);
+      params.append('limit', '100');
+
+      const response = await fetch(`/api/users?${params.toString()}`);
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data.users);
+      } else {
+        const err = await response.json().catch(() => ({}));
+        toast.error(err.error || 'Failed to fetch users');
+      }
     } catch (error) {
       toast.error('Error fetching users');
     }
   };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = !roleFilter || user.role === roleFilter;
-    return matchesSearch && matchesRole;
-  });
+  const filteredUsers = users; // server already filtered
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -193,54 +176,54 @@ export default function UsersPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                {filteredUsers.map((u) => (
+                  <tr key={u.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
                           <div className="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
                             <span className="text-primary-600 dark:text-primary-300 font-medium text-sm">
-                              {user.name.charAt(0).toUpperCase()}
+                              {u.name.charAt(0).toUpperCase()}
                             </span>
                           </div>
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {user.name}
+                            {u.name}
                           </div>
                           <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
                             <Mail className="w-4 h-4 mr-1" />
-                            {user.email}
+                            {u.email}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        user.role === 'admin' 
+                        u.role === 'admin' 
                           ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
                           : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                       }`}>
-                        {user.role}
+                        {u.role}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 flex items-center">
                       <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(user.createdAt)}
+                      {formatDate(u.createdAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                         Active
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end space-x-2">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <div className="flex items-center space-x-2">
                         <button className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300">
                           <UserCheck className="w-4 h-4" />
                         </button>

@@ -245,17 +245,6 @@ export default function HadithDetailPage() {
                     size="md"
                   />
                   <button
-                    onClick={handleLike}
-                    className={`p-2 rounded-lg transition-colors ${
-                      liked
-                        ? 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-red-100 dark:hover:bg-red-900'
-                    }`}
-                    title="Like"
-                  >
-                    <Heart className="w-5 h-5" />
-                  </button>
-                  <button
                     onClick={handleShare}
                     className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
                     title="Share"
@@ -368,49 +357,6 @@ export default function HadithDetailPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Quick Actions */}
-            <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Quick Actions
-              </h3>
-              <div className="space-y-2">
-                <div className="w-full flex items-center gap-3 p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
-                  <BookmarkButton
-                    contentType="hadith"
-                    contentId={hadith._id}
-                    contentTitle={`${getCollectionDisplayName(hadith.collectionName)} #${hadith.hadithNumber}`}
-                    contentDescription={hadith.englishTranslation}
-                    contentUrl={`/hadith/${hadith._id}`}
-                    metadata={{
-                      hadithNumber: hadith.hadithNumber,
-                      collectionName: hadith.collectionName,
-                      narrator: hadith.narrator,
-                      chapter: hadith.chapter,
-                    }}
-                    size="sm"
-                  />
-                  <span className="text-gray-700 dark:text-gray-300">Bookmark</span>
-                </div>
-                <button
-                  onClick={handleLike}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                    liked
-                      ? 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900'
-                  }`}
-                >
-                  <Heart className="w-5 h-5" />
-                  <span>{liked ? 'Liked' : 'Like'}</span>
-                </button>
-                <button
-                  onClick={handleShare}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-                >
-                  <Share2 className="w-5 h-5" />
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
-
             {/* Related Hadiths */}
             <div className="card p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

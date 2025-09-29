@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTheme } from './ThemeProvider';
 import SearchModal from './SearchModal';
+import SearchInline from './SearchInline';
 import NoSSR from './NoSSR';
 import { 
   Sun, 
@@ -20,7 +21,9 @@ import {
   MessageSquare,
   Newspaper,
   ShoppingBag,
-  BarChart3
+  BarChart3,
+  HelpCircle,
+  ShoppingCart
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -38,12 +41,23 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
     fetchUser();
+    const update = () => setCartCount(require('@/lib/cart').getCartCount());
+    update();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('cart:updated', update);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('cart:updated', update);
+      }
+    };
   }, []);
 
   const fetchUser = async () => {
@@ -107,6 +121,7 @@ export default function Navbar() {
     { href: '/hadith', label: 'Hadith', icon: MessageSquare },
     { href: '/news', label: 'News', icon: Newspaper },
     { href: '/products', label: 'Products', icon: ShoppingBag },
+    { href: '/questions', label: 'Questions', icon: HelpCircle },
   ];
 
   if (user?.role === 'admin') {
@@ -143,6 +158,14 @@ export default function Navbar() {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-2 sm:space-x-4">
+            <Link href="/cart" className="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <ShoppingCart className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full px-1.5">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
             {/* Search - Hidden on mobile */}
             <button 
               onClick={() => setShowSearch(true)}
@@ -319,9 +342,16 @@ export default function Navbar() {
         )}
       </div>
       
-      {/* Search Modal */}
+      {/* Search Panels */}
       <NoSSR>
-        <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
+        {/* Inline panel below navbar for desktop */}
+        <div className="hidden sm:block">
+          <SearchInline isOpen={showSearch} onClose={() => setShowSearch(false)} />
+        </div>
+        {/* Fallback modal for mobile */}
+        <div className="sm:hidden">
+          <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
+        </div>
       </NoSSR>
     </nav>
   );

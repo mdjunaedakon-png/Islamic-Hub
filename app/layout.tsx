@@ -48,7 +48,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white dark:from-gray-800 dark:to-gray-950">
             <Navbar />
             <main className="pt-16">
               {children}

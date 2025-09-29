@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { safeNextImageSrc } from '@/lib/imageUtils';
 import { 
   ArrowLeft, 
   Calendar, 
@@ -257,7 +258,7 @@ export default function NewsDetailPage() {
           <div className="mb-8">
             <div className="relative w-full h-96 rounded-lg overflow-hidden">
               <Image
-                src={news.image}
+                src={safeNextImageSrc(news.image)}
                 alt={news.title}
                 fill
                 className="object-cover"

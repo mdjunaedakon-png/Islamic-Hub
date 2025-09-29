@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { safeNextImageSrc } from '@/lib/imageUtils';
 import { 
   Newspaper, 
   Search, 
@@ -200,7 +201,7 @@ export default function NewsPage() {
               <article key={article._id} className="card overflow-hidden hover:shadow-lg transition-shadow duration-200">
                 <div className="relative">
                   <Image
-                    src={article.image}
+                    src={safeNextImageSrc(article.image)}
                     alt={article.title}
                     width={400}
                     height={250}

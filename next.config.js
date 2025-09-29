@@ -12,7 +12,8 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'imgur.com',
       'i.imgur.com',
-      'via.placeholder.com'
+      'via.placeholder.com',
+      'upload.wikimedia.org'
     ],
   },
 }

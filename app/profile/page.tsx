@@ -22,7 +22,8 @@ import {
   Star,
   Settings,
   BarChart3,
-  Video
+  Video,
+  Package
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -117,6 +118,7 @@ export default function ProfilePage() {
   const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([]);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [bookmarksLoading, setBookmarksLoading] = useState(false);
+  const [orders, setOrders] = useState<any[]>([]);
   // Booking system removed
   const router = useRouter();
 
@@ -125,6 +127,7 @@ export default function ProfilePage() {
     fetchUserStats();
     fetchUserActivity();
     fetchBookmarks();
+    fetchOrders();
     // Booking system removed
   }, []);
 
@@ -191,6 +194,18 @@ export default function ProfilePage() {
       console.error('Error fetching bookmarks:', error);
     } finally {
       setBookmarksLoading(false);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch('/api/orders');
+      if (res.ok) {
+        const data = await res.json();
+        setOrders(data.orders || []);
+      }
+    } catch (e) {
+      console.error('Failed to load orders', e);
     }
   };
 
@@ -426,67 +441,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Statistics */}
-            <div className="card p-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5" />
-                Your Activity
-              </h2>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <ShoppingBag className="w-8 h-8 text-primary-600 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalOrders}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Orders</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">${stats.totalSpent}</p>
-                </div>
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <Heart className="w-8 h-8 text-red-500 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.favoriteProducts}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Favorites</p>
-                </div>
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <BookOpen className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.bookmarkedNews}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Bookmarks</p>
-                </div>
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <MessageSquare className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.comments}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Comments</p>
-                </div>
-              </div>
-
-              {/* Additional Activity Stats */}
-              <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div className="w-8 h-8 text-purple-500 mx-auto mb-2 flex items-center justify-center">
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
-                    </svg>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.videosWatched}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Videos Watched</p>
-                </div>
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div className="w-8 h-8 text-green-500 mx-auto mb-2 flex items-center justify-center">
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.quranReadings}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Quran Readings</p>
-                </div>
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div className="w-8 h-8 text-orange-500 mx-auto mb-2 flex items-center justify-center">
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
-                    </svg>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.hadithReadings}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Hadith Readings</p>
-                </div>
-              </div>
-            </div>
+            
           </div>
 
           {/* Sidebar */}
@@ -531,51 +486,10 @@ export default function ProfilePage() {
             </div>
 
             {/* Account Settings */}
-            <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Account Settings
-              </h3>
-              <div className="space-y-2">
-                <button className="w-full flex items-center gap-3 p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                  <Bell className="w-5 h-5" />
-                  <span>Notifications</span>
-                </button>
-                <button className="w-full flex items-center gap-3 p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                  <Lock className="w-5 h-5" />
-                  <span>Change Password</span>
-                </button>
-                <button className="w-full flex items-center gap-3 p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                  <Settings className="w-5 h-5" />
-                  <span>Privacy Settings</span>
-                </button>
-              </div>
-            </div>
+            
 
             {/* Recent Activity */}
-            <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Recent Activity
-              </h3>
-              <div className="space-y-3">
-                {recentActivity.length > 0 ? (
-                  recentActivity.slice(0, 6).map((activity) => (
-                    <div key={activity.id} className="flex items-center gap-3 text-sm">
-                      <div className={`w-2 h-2 rounded-full bg-${activity.color}-500`}></div>
-                      <div className="flex-1">
-                        <span className="text-gray-600 dark:text-gray-400">{activity.description}</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-500">
-                          {formatTimeAgo(activity.timestamp)}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-4">
-                    <p className="text-gray-500 dark:text-gray-400">No recent activity</p>
-                  </div>
-                )}
-              </div>
-            </div>
+            {/*  */}
 
             {/* Bookmarks */}
             <div className="card p-6">
@@ -664,36 +578,35 @@ export default function ProfilePage() {
               )}
             </div>
 
+            {/* Orders */}
+            <div className="card">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <Package className="w-5 h-5" /> Your Orders
+                </h3>
+                <span className="text-sm text-gray-500">{orders.length} orders</span>
+              </div>
+              <div className="p-4 space-y-3">
+                {orders.length === 0 ? (
+                  <p className="text-sm text-gray-500">You have no orders yet.</p>
+                ) : (
+                  orders.map((o) => (
+                    <div key={o._id} className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-600 dark:text-gray-300">{new Date(o.createdAt).toLocaleString()}</div>
+                        <span className="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">{o.paymentMethod.toUpperCase()} • {o.status}</span>
+                      </div>
+                      <div className="mt-2 text-sm">{o.items.length} items • Total ${o.total.toFixed(2)}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
             {/* Booking section removed */}
 
             {/* Content Statistics (for admins) */}
-            {user.role === 'admin' && (
-              <div className="card p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Content Statistics
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">Total Products</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">{contentStats.totalProducts}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">Total News</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">{contentStats.totalNews}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">Total Videos</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">{contentStats.totalVideos}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">Featured Content</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">
-                      {contentStats.featuredProducts + contentStats.publishedNews + contentStats.publishedVideos}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
+            
           </div>
         </div>
       </div>

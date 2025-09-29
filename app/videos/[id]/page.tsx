@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { safeNextImageSrc } from '@/lib/imageUtils';
 import {
   Play,
   Pause,
@@ -633,7 +634,7 @@ export default function VideoDetailPage() {
                 >
                   <div className="relative w-24 h-16 sm:w-32 sm:h-20 lg:w-40 lg:h-24 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
                     <Image
-                      src={relatedVideo.thumbnail}
+                      src={safeNextImageSrc(relatedVideo.thumbnail)}
                       alt={relatedVideo.title}
                       fill
                       className="object-cover"

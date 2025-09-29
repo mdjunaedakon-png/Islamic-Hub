@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { safeNextImageSrc } from '@/lib/imageUtils';
 import { 
   ArrowLeft, 
   ShoppingCart, 
@@ -23,6 +24,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BookmarkButton from '@/components/BookmarkButton';
+import { addToCart as addToCartUtil } from '@/lib/cart';
 
 interface Product {
   _id: string;
@@ -103,11 +105,9 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
-    if (!user) {
-      toast.error('Please login to add items to cart');
-      return;
-    }
-    toast.success(`Added ${quantity} ${product?.name} to cart`);
+    if (!product) return;
+    addToCartUtil({ productId: product._id, name: product.name, price: product.price, image: product.images[0], quantity });
+    toast.success(`Added ${quantity} ${product.name} to cart`);
   };
 
   const handleFavorite = () => {
@@ -257,7 +257,7 @@ export default function ProductDetailPage() {
           <div className="space-y-4">
             <div className="relative w-full h-96 rounded-lg overflow-hidden">
               <Image
-                src={product.images[selectedImage]}
+                src={safeNextImageSrc(product.images[selectedImage])}
                 alt={product.name}
                 fill
                 className="object-cover"
@@ -278,7 +278,7 @@ export default function ProductDetailPage() {
                     }`}
                   >
                     <Image
-                      src={image}
+                      src={safeNextImageSrc(image)}
                       alt={`${product.name} ${index + 1}`}
                       fill
                       className="object-cover"
@@ -359,27 +359,44 @@ export default function ProductDetailPage() {
                   >
                     <Minus className="w-4 h-4" />
                   </button>
-                  <span className="px-4 py-2 min-w-[60px] text-center">{quantity}</span>
+                  <span className="px-4 py-2">{quantity}</span>
                   <button
-                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                    onClick={() => setQuantity(quantity + 1)}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {product.stock} in stock
-                </span>
               </div>
 
-              <button
-                onClick={handleAddToCart}
-                disabled={product.stock === 0}
-                className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-              </button>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={product.stock === 0}
+                  className="w-full btn-secondary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      const amount = (product.price * quantity).toFixed(2);
+                      const invoiceId = `INV-${product._id}-${Date.now()}`;
+                      const res = await fetch('/api/payments/bkash/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount, invoiceId }) });
+                      const data = await res.json();
+                      if (!res.ok || !data.redirectURL) throw new Error(data.error || 'Could not start payment');
+                      window.location.href = data.redirectURL;
+                    } catch (e: any) {
+                      toast.error(e.message || 'Payment error');
+                    }
+                  }}
+                  disabled={product.stock === 0}
+                  className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Buy Now
+                </button>
+              </div>
             </div>
 
             {/* Product Info */}

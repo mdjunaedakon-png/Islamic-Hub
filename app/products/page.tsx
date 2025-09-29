@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { safeNextImageSrc } from '@/lib/imageUtils';
 import { 
   ShoppingBag, 
   Search, 
@@ -69,6 +70,12 @@ export default function ProductsPage() {
   const [user, setUser] = useState<any>(null);
   const [cart, setCart] = useState<string[]>([]);
 
+  const addProductToCart = (p: Product) => {
+    const { addToCart } = require('@/lib/cart');
+    addToCart({ productId: p._id, name: p.name, price: p.price, image: safeNextImageSrc(p.images[0]), quantity: 1 });
+    toast.success('Added to cart');
+  };
+
   useEffect(() => {
     fetchProducts();
     fetchUser();
@@ -113,13 +120,6 @@ export default function ProductsPage() {
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
-  };
-
-  const addToCart = (productId: string) => {
-    const newCart = [...cart, productId];
-    setCart(newCart);
-    localStorage.setItem('islamic-hub-cart', JSON.stringify(newCart));
-    toast.success('Product added to cart!');
   };
 
   const addToWishlist = (productId: string) => {
@@ -237,7 +237,7 @@ export default function ProductsPage() {
               <Link key={product._id} href={`/products/${product._id}`} className="card overflow-hidden hover:shadow-lg transition-shadow duration-200 group block">
                 <div className="relative">
                   <Image
-                    src={product.images[0]}
+                    src={safeNextImageSrc(product.images[0])}
                     alt={product.name}
                     width={300}
                     height={300}
@@ -315,19 +315,42 @@ export default function ProductsPage() {
                         <span className="text-red-600">Out of Stock</span>
                       )}
                     </div>
-                    
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addToCart(product._id);
-                      }}
-                      disabled={product.stock === 0}
-                      className="btn-primary flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <ShoppingCart className="w-4 h-4" />
-                      Add to Cart
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          addProductToCart(product);
+                        }}
+                        disabled={product.stock === 0}
+                        className="btn-secondary flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          try {
+                            const amount = product.price.toFixed(2);
+                            const invoiceId = `INV-${product._id}-${Date.now()}`;
+                            const res = await fetch('/api/payments/bkash/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount, invoiceId }) });
+                            const data = await res.json();
+                            if (!res.ok || !data.redirectURL) {
+                              throw new Error(data.error || 'Could not start payment');
+                            }
+                            window.location.href = data.redirectURL;
+                          } catch (err: any) {
+                            toast.error(err.message || 'Payment error');
+                          }
+                        }}
+                        disabled={product.stock === 0}
+                        className="btn-primary flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Buy Now
+                      </button>
+                    </div>
                   </div>
                   
                   {product.tags.length > 0 && (

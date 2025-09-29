@@ -13,7 +13,8 @@ import {
   TrendingUp,
   Eye,
   Heart,
-  Plus
+  Plus,
+  HelpCircle
 } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -132,6 +133,20 @@ export default function DashboardPage() {
       icon: Users,
       href: '/dashboard/users',
       color: 'bg-orange-500',
+    },
+    {
+      title: 'Answer Questions',
+      description: 'Reply to user questions',
+      icon: HelpCircle,
+      href: '/dashboard/questions',
+      color: 'bg-teal-500',
+    },
+    {
+      title: 'Manage Orders',
+      description: 'View and update product orders',
+      icon: ShoppingBag,
+      href: '/dashboard/orders',
+      color: 'bg-emerald-600',
     },
   ];
 
