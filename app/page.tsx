@@ -145,7 +145,7 @@ export default function HomePage() {
       <section className="gradient-bg islamic-pattern py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 text-shadow-lg">
-            Welcome to <span className="text-primary-600">Islamic Hub</span>
+            Welcome to <span className="text-primary-600">HasanaTV</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
             Your complete Islamic resource center. Access Quran, Hadith, Islamic videos, 

@@ -39,6 +39,10 @@ export default function LoginPage() {
 
       if (response.ok) {
         toast.success('Login successful!');
+        // Notify app to refresh auth state immediately
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('auth:changed'));
+        }
         router.push('/');
       } else {
         toast.error(data.error || 'Login failed');
@@ -70,7 +74,7 @@ export default function LoginPage() {
             Welcome back
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Sign in to your Islamic Hub account
+            Sign in to your HasanaTV account
           </p>
         </div>
 
@@ -153,7 +157,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300 dark:border-gray-600" />
@@ -192,7 +196,7 @@ export default function LoginPage() {
                 Sign up here
               </Link>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

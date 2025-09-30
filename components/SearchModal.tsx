@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, X, BookOpen, MessageSquare, Newspaper, ShoppingBag, Video, Keyboard } from 'lucide-react';
+import { Search, X, BookOpen, MessageSquare, Newspaper, Video, Keyboard } from 'lucide-react';
 import Link from 'next/link';
 
 interface SearchResult {
-  type: 'video' | 'quran' | 'hadith' | 'news' | 'product';
+  type: 'video' | 'quran' | 'hadith' | 'news';
   id: string;
   title: string;
   description: string;
@@ -36,12 +36,11 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     setLoading(true);
     try {
       // Search across different content types
-      const [videosRes, quranRes, hadithRes, newsRes, productsRes] = await Promise.all([
+      const [videosRes, quranRes, hadithRes, newsRes] = await Promise.all([
         fetch(`/api/videos?search=${encodeURIComponent(query)}`),
         fetch(`/api/quran?search=${encodeURIComponent(query)}`),
         fetch(`/api/hadith?search=${encodeURIComponent(query)}`),
         fetch(`/api/news?search=${encodeURIComponent(query)}`),
-        fetch(`/api/products?search=${encodeURIComponent(query)}`),
       ]);
 
       const searchResults: SearchResult[] = [];
@@ -98,19 +97,6 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
         });
       }
 
-      if (productsRes.ok) {
-        const productsData = await productsRes.json();
-        productsData.products?.slice(0, 3).forEach((product: any) => {
-          searchResults.push({
-            type: 'product',
-            id: product._id,
-            title: product.name,
-            description: product.description,
-            url: `/products/${product._id}`,
-          });
-        });
-      }
-
       setResults(searchResults);
     } catch (error) {
       console.error('Search error:', error);
@@ -129,8 +115,6 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
         return MessageSquare;
       case 'news':
         return Newspaper;
-      case 'product':
-        return ShoppingBag;
       default:
         return Search;
     }
@@ -146,8 +130,6 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
         return 'Hadith';
       case 'news':
         return 'News';
-      case 'product':
-        return 'Product';
       default:
         return 'Result';
     }
@@ -160,7 +142,6 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     { label: 'Quran', value: 'quran' },
     { label: 'Hadith', value: 'hadith' },
     { label: 'News', value: 'news' },
-    { label: 'Products', value: 'product' },
   ];
 
   return (
@@ -172,7 +153,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
           <div className="bg-gradient-to-r from-primary-50/60 to-transparent dark:from-gray-800/40 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Search Islamic Hub
+                Search HasanaTV
               </h3>
               <button
                 onClick={onClose}
@@ -187,7 +168,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Search videos, Quran, Hadith, news, products..."
+                placeholder="Search videos, Quran, Hadith, news..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full pl-12 pr-12 py-3 rounded-xl bg-white dark:bg-gray-700/80 border border-gray-200 dark:border-gray-600 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary-500/30 focus:border-primary-500 transition-all"

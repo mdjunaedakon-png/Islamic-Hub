@@ -9,7 +9,6 @@ import {
   BookOpen, 
   MessageSquare, 
   Newspaper, 
-  ShoppingBag,
   TrendingUp,
   Eye,
   Heart,
@@ -30,7 +29,6 @@ interface DashboardStats {
   totalUsers: number;
   totalVideos: number;
   totalNews: number;
-  totalProducts: number;
   totalViews: number;
   totalLikes: number;
 }
@@ -42,7 +40,6 @@ export default function DashboardPage() {
     totalUsers: 0,
     totalVideos: 0,
     totalNews: 0,
-    totalProducts: 0,
     totalViews: 0,
     totalLikes: 0,
   });
@@ -82,7 +79,6 @@ export default function DashboardPage() {
         totalUsers: 1250,
         totalVideos: 89,
         totalNews: 156,
-        totalProducts: 234,
         totalViews: 45678,
         totalLikes: 1234,
       });
@@ -121,13 +117,6 @@ export default function DashboardPage() {
       color: 'bg-indigo-500',
     },
     {
-      title: 'Add Product',
-      description: 'Add new Islamic product',
-      icon: ShoppingBag,
-      href: '/dashboard/products/create',
-      color: 'bg-purple-500',
-    },
-    {
       title: 'Manage Users',
       description: 'View and manage users',
       icon: Users,
@@ -140,13 +129,6 @@ export default function DashboardPage() {
       icon: HelpCircle,
       href: '/dashboard/questions',
       color: 'bg-teal-500',
-    },
-    {
-      title: 'Manage Orders',
-      description: 'View and update product orders',
-      icon: ShoppingBag,
-      href: '/dashboard/orders',
-      color: 'bg-emerald-600',
     },
   ];
 
@@ -171,13 +153,6 @@ export default function DashboardPage() {
       icon: Newspaper,
       color: 'text-purple-600',
       bgColor: 'bg-purple-100 dark:bg-purple-900',
-    },
-    {
-      title: 'Total Products',
-      value: stats.totalProducts.toLocaleString(),
-      icon: ShoppingBag,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-100 dark:bg-orange-900',
     },
     {
       title: 'Total Views',
@@ -219,7 +194,7 @@ export default function DashboardPage() {
                 Admin Dashboard
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">
-                Welcome back, {user.name}! Manage your Islamic Hub content.
+                Welcome back, {user.name}! Manage your HasanaTV content.
               </p>
             </div>
           </div>
@@ -228,7 +203,7 @@ export default function DashboardPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
           {statCards.map((stat, index) => (
             <div key={index} className="card p-6">
               <div className="flex items-center">
@@ -253,7 +228,7 @@ export default function DashboardPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Quick Actions
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {quickActions.map((action, index) => (
               <Link
                 key={index}
@@ -277,71 +252,83 @@ export default function DashboardPage() {
         </div>
 
         {/* Content Management */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Recent Videos */}
+        {/* Video Management */}
+        <div className="mt-8">
           <div className="card p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Recent Videos
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Video className="w-5 h-5 text-blue-600" />
+                Video Management
               </h3>
-              <Link href="/dashboard/videos" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                View all
-              </Link>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Islamic Lecture Series</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">2 hours ago</p>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                  <Eye className="w-4 h-4" />
-                  <span>1.2k</span>
-                </div>
+              <div className="flex gap-2">
+                <Link 
+                  href="/dashboard/videos" 
+                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                >
+                  Manage All
+                </Link>
+                <Link 
+                  href="/dashboard/videos/upload" 
+                  className="btn-primary text-sm flex items-center gap-1"
+                >
+                  <Plus className="w-3 h-3" />
+                  Add New
+                </Link>
               </div>
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Nasheed Collection</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">5 hours ago</p>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                  <Eye className="w-4 h-4" />
-                  <span>856</span>
-                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">All Videos</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Manage uploaded videos</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Categories</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Filter by categories</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Engagement</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Views, likes and comments</p>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Recent News */}
+        {/* News Management */}
+        <div className="mt-8">
           <div className="card p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Recent News
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Newspaper className="w-5 h-5 text-green-600" />
+                News Management
               </h3>
-              <Link href="/dashboard/news" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                View all
-              </Link>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Islamic Conference 2024</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">1 day ago</p>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                  <Eye className="w-4 h-4" />
-                  <span>2.1k</span>
-                </div>
+              <div className="flex gap-2">
+                <Link 
+                  href="/dashboard/news" 
+                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                >
+                  Manage All
+                </Link>
+                <Link 
+                  href="/dashboard/news/create" 
+                  className="btn-primary text-sm flex items-center gap-1"
+                >
+                  <Plus className="w-3 h-3" />
+                  Add New
+                </Link>
               </div>
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">New Islamic Center Opens</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">3 days ago</p>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                  <Eye className="w-4 h-4" />
-                  <span>1.5k</span>
-                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">All Articles</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Manage published news</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Categories</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Filter by categories</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Featured</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Highlight important news</p>
               </div>
             </div>
           </div>

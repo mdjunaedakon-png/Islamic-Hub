@@ -86,7 +86,11 @@ export default function VideosPage() {
   };
 
   const handleDelete = async (videoId: string) => {
-    if (!confirm('Are you sure you want to delete this video?')) return;
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this video? This action cannot be undone.'
+    );
+    
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/videos/${videoId}`, {
@@ -97,9 +101,11 @@ export default function VideosPage() {
         toast.success('Video deleted successfully');
         fetchVideos();
       } else {
-        toast.error('Failed to delete video');
+        const errorData = await response.json();
+        toast.error(errorData.error || 'Failed to delete video');
       }
     } catch (error) {
+      console.error('Delete error:', error);
       toast.error('Error deleting video');
     }
   };
@@ -250,9 +256,13 @@ export default function VideosPage() {
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                    <button className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
+                    <Link
+                      href={`/dashboard/videos/edit/${video._id}`}
+                      className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
+                      title="Edit Video"
+                    >
                       <Edit className="w-4 h-4" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

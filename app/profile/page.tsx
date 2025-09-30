@@ -16,14 +16,12 @@ import {
   Bell,
   Lock,
   Heart,
-  ShoppingBag,
   BookOpen,
   MessageSquare,
   Star,
   Settings,
   BarChart3,
-  Video,
-  Package
+  Video
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -37,9 +35,6 @@ interface User {
 }
 
 interface UserStats {
-  totalOrders: number;
-  totalSpent: number;
-  favoriteProducts: number;
   bookmarkedNews: number;
   comments: number;
   videosWatched: number;
@@ -48,10 +43,8 @@ interface UserStats {
 }
 
 interface ContentStats {
-  totalProducts: number;
   totalNews: number;
   totalVideos: number;
-  featuredProducts: number;
   publishedNews: number;
   publishedVideos: number;
 }
@@ -67,7 +60,7 @@ interface ActivityItem {
 
 interface Bookmark {
   _id: string;
-  contentType: 'video' | 'news' | 'hadith' | 'quran' | 'product';
+  contentType: 'video' | 'news' | 'hadith' | 'quran';
   contentId: string;
   contentTitle: string;
   contentDescription?: string;
@@ -98,9 +91,6 @@ export default function ProfilePage() {
     email: '',
   });
   const [stats, setStats] = useState<UserStats>({
-    totalOrders: 0,
-    totalSpent: 0,
-    favoriteProducts: 0,
     bookmarkedNews: 0,
     comments: 0,
     videosWatched: 0,
@@ -108,17 +98,14 @@ export default function ProfilePage() {
     hadithReadings: 0,
   });
   const [contentStats, setContentStats] = useState<ContentStats>({
-    totalProducts: 0,
     totalNews: 0,
     totalVideos: 0,
-    featuredProducts: 0,
     publishedNews: 0,
     publishedVideos: 0,
   });
   const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([]);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [bookmarksLoading, setBookmarksLoading] = useState(false);
-  const [orders, setOrders] = useState<any[]>([]);
   // Booking system removed
   const router = useRouter();
 
@@ -127,8 +114,6 @@ export default function ProfilePage() {
     fetchUserStats();
     fetchUserActivity();
     fetchBookmarks();
-    fetchOrders();
-    // Booking system removed
   }, []);
 
   const fetchUser = async () => {
@@ -198,15 +183,7 @@ export default function ProfilePage() {
   };
 
   const fetchOrders = async () => {
-    try {
-      const res = await fetch('/api/orders');
-      if (res.ok) {
-        const data = await res.json();
-        setOrders(data.orders || []);
-      }
-    } catch (e) {
-      console.error('Failed to load orders', e);
-    }
+    // Orders functionality removed
   };
 
   // Booking system removed
@@ -272,8 +249,6 @@ export default function ProfilePage() {
         return `/hadith/${bookmark.contentId}`;
       case 'quran':
         return `/quran/${bookmark.contentId}`;
-      case 'product':
-        return `/products/${bookmark.contentId}`;
       default:
         return '#';
     }
@@ -453,13 +428,6 @@ export default function ProfilePage() {
               </h3>
               <div className="space-y-2">
                 <Link
-                  href="/products"
-                  className="flex items-center gap-3 p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <ShoppingBag className="w-5 h-5" />
-                  <span>Browse Products</span>
-                </Link>
-                <Link
                   href="/news"
                   className="flex items-center gap-3 p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
@@ -519,7 +487,6 @@ export default function ProfilePage() {
                             {bookmark.contentType === 'news' && <MessageSquare className="w-6 h-6 text-primary-600" />}
                             {bookmark.contentType === 'hadith' && <BookOpen className="w-6 h-6 text-primary-600" />}
                             {bookmark.contentType === 'quran' && <BookOpen className="w-6 h-6 text-primary-600" />}
-                            {bookmark.contentType === 'product' && <ShoppingBag className="w-6 h-6 text-primary-600" />}
                           </div>
                         )}
                       </div>
@@ -578,30 +545,7 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {/* Orders */}
-            <div className="card">
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Package className="w-5 h-5" /> Your Orders
-                </h3>
-                <span className="text-sm text-gray-500">{orders.length} orders</span>
-              </div>
-              <div className="p-4 space-y-3">
-                {orders.length === 0 ? (
-                  <p className="text-sm text-gray-500">You have no orders yet.</p>
-                ) : (
-                  orders.map((o) => (
-                    <div key={o._id} className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-600 dark:text-gray-300">{new Date(o.createdAt).toLocaleString()}</div>
-                        <span className="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">{o.paymentMethod.toUpperCase()} • {o.status}</span>
-                      </div>
-                      <div className="mt-2 text-sm">{o.items.length} items • Total ${o.total.toFixed(2)}</div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
+            {/* Orders section removed */}
 
             {/* Booking section removed */}
 

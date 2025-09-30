@@ -11,20 +11,20 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://islamichub-sigma.vercel.app'),
-  title: 'Islamic Hub - Your Complete Islamic Resource',
-  description: 'A comprehensive Islamic web application featuring Quran, Hadith, Islamic videos, news, and products.',
-  keywords: 'islamic, quran, hadith, islamic videos, islamic news, islamic products, muslim, islam',
-  authors: [{ name: 'Islamic Hub Team' }],
+  title: 'HasanaTV - Your Complete Islamic Resource',
+  description: 'A comprehensive Islamic web application featuring Quran, Hadith, Islamic videos, and news.',
+  keywords: 'islamic, quran, hadith, islamic videos, islamic news, muslim, islam',
+  authors: [{ name: 'HasanaTV Team' }],
   openGraph: {
-    title: 'Islamic Hub - Your Complete Islamic Resource',
-    description: 'A comprehensive Islamic web application featuring Quran, Hadith, Islamic videos, news, and products.',
+    title: 'HasanaTV - Your Complete Islamic Resource',
+    description: 'A comprehensive Islamic web application featuring Quran, Hadith, Islamic videos, and news.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Islamic Hub - Your Complete Islamic Resource',
-    description: 'A comprehensive Islamic web application featuring Quran, Hadith, Islamic videos, news, and products.',
+    title: 'HasanaTV - Your Complete Islamic Resource',
+    description: 'A comprehensive Islamic web application featuring Quran, Hadith, Islamic videos, and news.',
   },
   robots: 'index, follow',
 };

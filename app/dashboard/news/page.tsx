@@ -84,13 +84,26 @@ export default function NewsPage() {
   };
 
   const handleDelete = async (newsId: string) => {
-    if (!confirm('Are you sure you want to delete this news article?')) return;
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this news article? This action cannot be undone.'
+    );
+    
+    if (!confirmed) return;
 
     try {
-      // In a real app, you would have a delete API endpoint
-      toast.success('News article deleted successfully');
-      fetchNews();
+      const response = await fetch(`/api/news/${newsId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success('News article deleted successfully');
+        fetchNews();
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || 'Failed to delete news article');
+      }
     } catch (error) {
+      console.error('Delete error:', error);
       toast.error('Error deleting news article');
     }
   };
@@ -243,9 +256,13 @@ export default function NewsPage() {
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                    <button className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
+                    <Link
+                      href={`/dashboard/news/edit/${article._id}`}
+                      className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
+                      title="Edit Article"
+                    >
                       <Edit className="w-4 h-4" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

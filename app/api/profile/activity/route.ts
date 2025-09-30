@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import { getCurrentUser } from '@/lib/auth';
-import Product from '@/models/Product';
 import News from '@/models/News';
 import Video from '@/models/Video';
 
@@ -20,16 +19,7 @@ export async function GET(request: NextRequest) {
       await connectDB();
 
       // Get recent activity data
-      const [
-        recentProducts,
-        recentNews,
-        recentVideos
-      ] = await Promise.all([
-        Product.find({ active: true })
-          .sort({ createdAt: -1 })
-          .limit(5)
-          .select('name category createdAt images')
-          .lean(),
+      const [recentNews, recentVideos] = await Promise.all([
         News.find({ published: true })
           .sort({ createdAt: -1 })
           .limit(5)
@@ -96,7 +86,6 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         recentActivity,
-        recentProducts,
         recentNews,
         recentVideos
       });
@@ -149,7 +138,6 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         recentActivity,
-        recentProducts: [],
         recentNews: [],
         recentVideos: []
       });

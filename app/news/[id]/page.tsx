@@ -48,6 +48,7 @@ interface User {
 
 export default function NewsDetailPage() {
   const [news, setNews] = useState<News | null>(null);
+  const [related, setRelated] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [bookmarked, setBookmarked] = useState(false);
@@ -79,6 +80,18 @@ export default function NewsDetailPage() {
       if (response.ok) {
         const data = await response.json();
         setNews(data.news);
+        // Load related by category
+        try {
+          const params = new URLSearchParams();
+          if (data.news?.category) params.append('category', data.news.category);
+          params.append('limit', '6');
+          const relRes = await fetch(`/api/news?${params.toString()}`);
+          if (relRes.ok) {
+            const rel = await relRes.json();
+            const items = (rel.news || []).filter((n: News) => n._id !== data.news._id).slice(0, 3);
+            setRelated(items);
+          }
+        } catch {}
       } else if (response.status === 404) {
         toast.error('News article not found');
         router.push('/news');
@@ -301,34 +314,31 @@ export default function NewsDetailPage() {
             Related Articles
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* This would be populated with related articles */}
-            <div className="card p-6">
-              <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                Related Article Title
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Brief description of the related article...
-              </p>
-            </div>
-            <div className="card p-6">
-              <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                Another Related Article
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Brief description of another related article...
-              </p>
-            </div>
-            <div className="card p-6">
-              <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                Third Related Article
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Brief description of the third related article...
-              </p>
-            </div>
+            {related.length === 0 ? (
+              <div className="col-span-3 text-sm text-gray-500 dark:text-gray-400">No related articles found.</div>
+            ) : (
+              related.map((article) => (
+                <Link key={article._id} href={`/news/${article._id}`} className="card p-6 hover:shadow-lg transition-shadow">
+                  <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 overflow-hidden">
+                    {article.image && (
+                      <Image
+                        src={safeNextImageSrc(article.image)}
+                        alt={article.title}
+                        width={600}
+                        height={300}
+                        className="w-full h-48 object-cover"
+                      />
+                    )}
+                  </div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                    {article.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                    {article.excerpt}
+                  </p>
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </div>

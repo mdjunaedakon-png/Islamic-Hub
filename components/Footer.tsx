@@ -54,7 +54,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">IH</span>
               </div>
-              <span className="text-xl font-bold">Islamic Hub</span>
+              <span className="text-xl font-bold">HasanaTV</span>
             </Link>
             <p className="text-gray-400 mb-6">
               Your complete Islamic resource center. Access Quran, Hadith, Islamic videos, 
@@ -115,7 +115,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">
-            © {currentYear} Islamic Hub. All rights reserved.
+            © {currentYear} HasanaTV. All rights reserved.
           </p>
           <p className="text-gray-400 text-sm flex items-center mt-2 md:mt-0">
             Made with <Heart className="w-4 h-4 text-red-500 mx-1" /> for the Muslim community

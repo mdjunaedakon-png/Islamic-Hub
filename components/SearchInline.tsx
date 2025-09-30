@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Search, X, BookOpen, MessageSquare, Newspaper, ShoppingBag, Video } from 'lucide-react';
+import { Search, X, BookOpen, MessageSquare, Newspaper, Video } from 'lucide-react';
 import Link from 'next/link';
 
 interface SearchResult {
-  type: 'video' | 'quran' | 'hadith' | 'news' | 'product';
+  type: 'video' | 'quran' | 'hadith' | 'news';
   id: string;
   title: string;
   description: string;
@@ -40,12 +40,11 @@ export default function SearchInline({ isOpen, onClose }: { isOpen: boolean; onC
   const performSearch = async () => {
     setLoading(true);
     try {
-      const [videosRes, quranRes, hadithRes, newsRes, productsRes] = await Promise.all([
+      const [videosRes, quranRes, hadithRes, newsRes] = await Promise.all([
         fetch(`/api/videos?search=${encodeURIComponent(query)}`),
         fetch(`/api/quran?search=${encodeURIComponent(query)}`),
         fetch(`/api/hadith?search=${encodeURIComponent(query)}`),
         fetch(`/api/news?search=${encodeURIComponent(query)}`),
-        fetch(`/api/products?search=${encodeURIComponent(query)}`),
       ]);
       const searchResults: SearchResult[] = [];
       if (videosRes.ok) {
@@ -64,10 +63,6 @@ export default function SearchInline({ isOpen, onClose }: { isOpen: boolean; onC
         const newsData = await newsRes.json();
         newsData.news?.slice(0, 3).forEach((n: any) => searchResults.push({ type: 'news', id: n._id, title: n.title, description: n.excerpt, url: `/news/${n._id}` }));
       }
-      if (productsRes.ok) {
-        const productsData = await productsRes.json();
-        productsData.products?.slice(0, 3).forEach((p: any) => searchResults.push({ type: 'product', id: p._id, title: p.name, description: p.description, url: `/products/${p._id}` }));
-      }
       setResults(searchResults);
     } finally {
       setLoading(false);
@@ -84,8 +79,6 @@ export default function SearchInline({ isOpen, onClose }: { isOpen: boolean; onC
         return MessageSquare;
       case 'news':
         return Newspaper;
-      case 'product':
-        return ShoppingBag;
       default:
         return Search;
     }
@@ -103,7 +96,7 @@ export default function SearchInline({ isOpen, onClose }: { isOpen: boolean; onC
               ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search videos, Quran, Hadith, news, products..."
+              placeholder="Search videos, Quran, Hadith, news..."
               className="w-full pl-10 pr-10 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-4 focus:ring-primary-500/20"
             />
             <button onClick={onClose} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1">

@@ -62,8 +62,12 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Registration successful! Please sign in.');
-        router.push('/auth/login');
+        toast.success('Registration successful!');
+        // Auto login UX: notify auth change so navbar updates after redirect
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('auth:changed'));
+        }
+        router.push('/');
       } else {
         toast.error(data.error || 'Registration failed');
       }
@@ -94,7 +98,7 @@ export default function RegisterPage() {
             Create your account
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Join Islamic Hub and start your spiritual journey
+            Join HasanaTV and start your spiritual journey
           </p>
         </div>
 
@@ -226,7 +230,7 @@ export default function RegisterPage() {
           </form>
 
           <div className="mt-6">
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
@@ -254,7 +258,7 @@ export default function RegisterPage() {
                 </svg>
                 <span className="ml-2">Facebook</span>
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-6 text-center">

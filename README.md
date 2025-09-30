@@ -1,4 +1,4 @@
-# Islamic Hub - Complete Islamic Web Application
+# HasanaTV - Complete Islamic Web Application
 
 A comprehensive Islamic web application built with Next.js 14, TypeScript, TailwindCSS, and MongoDB. Features Quran, Hadith, Islamic videos, news, and products all in one place.
 

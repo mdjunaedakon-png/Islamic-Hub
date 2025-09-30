@@ -1,5 +1,5 @@
-# Islamic Hub Setup Script
-Write-Host "🕌 Islamic Hub Setup Script" -ForegroundColor Green
+# HasanaTV Setup Script
+Write-Host "🕌 HasanaTV Setup Script" -ForegroundColor Green
 Write-Host "================================" -ForegroundColor Green
 
 # Check if Node.js is installed
