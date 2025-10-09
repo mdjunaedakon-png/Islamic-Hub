@@ -13,7 +13,8 @@ import {
   Eye,
   Heart,
   Plus,
-  HelpCircle
+  HelpCircle,
+  Navigation
 } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -129,6 +130,13 @@ export default function DashboardPage() {
       icon: HelpCircle,
       href: '/dashboard/questions',
       color: 'bg-teal-500',
+    },
+    {
+      title: 'Manage Navbar',
+      description: 'Customize news page navigation',
+      icon: Navigation,
+      href: '/dashboard/navbar',
+      color: 'bg-purple-500',
     },
   ];
 
